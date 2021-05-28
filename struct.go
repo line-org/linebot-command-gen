@@ -50,36 +50,25 @@ const (
 	Developer      UserLevelStr = "Developer"
 )
 
-func (u UserLevelStr) ToUserLevel() users.UserLevel {
-	switch u {
-	case PermanentBlack:
-		return users.PermanentBlack
-	case GlobalBlack:
-		return users.GlobalBlack
-	case LocalBlack:
-		return users.LocalBlack
-	case None:
-		return users.None
-	case LocalWhite:
-		return users.LocalWhite
-	case GlobalWhite:
-		return users.GlobalWhite
-	case LocalBot:
-		return users.LocalBot
-	case GlobalBot:
-		return users.GlobalBot
-	case LocalAdmin:
-		return users.LocalAdmin
-	case SimpleAdmin:
-		return users.SimpleAdmin
-	case NormalAdmin:
-		return users.NormalAdmin
-	case SupremeAdmin:
-		return users.SupremeAdmin
-	case Buyer:
-		return users.Buyer
-	case Developer:
-		return users.Developer
+var (
+	UserLevelStrC = map[UserLevelStr]users.UserLevel{
+		PermanentBlack: users.PermanentBlack,
+		GlobalBlack:    users.GlobalBlack,
+		LocalBlack:     users.LocalBlack,
+		None:           users.None,
+		LocalWhite:     users.LocalWhite,
+		GlobalWhite:    users.GlobalWhite,
+		LocalBot:       users.LocalBot,
+		GlobalBot:      users.GlobalBot,
+		LocalAdmin:     users.LocalAdmin,
+		SimpleAdmin:    users.SimpleAdmin,
+		NormalAdmin:    users.NormalAdmin,
+		SupremeAdmin:   users.SupremeAdmin,
+		Buyer:          users.Buyer,
+		Developer:      users.Developer,
 	}
-	return users.None
+)
+
+func (u UserLevelStr) ToUserLevel() users.UserLevel {
+	return UserLevelStrC[u]
 }
