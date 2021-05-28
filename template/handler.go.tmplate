@@ -1,0 +1,48 @@
+package template
+
+import (
+	"github.com/line-org/lineall/lineapp/service/line"
+	"github.com/line-org/protection-bot/bot"
+	"github.com/line-org/protection-bot/commands"
+	"github.com/line-org/protection-bot/users"
+)
+
+type CommandHandler interface {
+	{{- range $index, $cmd := .Cmds}}
+	{{$cmd.IDUpper}}(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+    {{end}}
+}
+type CommandData struct {
+	Cmds map[string]*CommandInfo
+}
+type CommandInfo struct {
+	ID       string
+	Level    users.UserLevel
+	BaseText string
+	SubTexts map[string]struct{}
+	Help     struct {
+		Ja string
+		En string
+	}
+	Genre    commands.CmdGenre
+	Function func(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+}
+
+func NewCommandDatas(handler CommandHandler) *CommandData {
+	por := &CommandData{}
+    {{- range $index, $cmd := .Cmds}}
+	por.Cmds["{{$cmd.ID}}"] = &CommandInfo{
+		ID:       "{{$cmd.ID}}",
+		Level:    {{$cmd.Level.ToUserLevel}},
+		BaseText: "{{$cmd.BaseText}}",
+		SubTexts: nil,
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: {{$cmd.Ja}}, En :{{$cmd.EN}}},
+		Genre:    "{{$cmd.Genre}}",
+		Function: handler.{{$cmd.IDUpper}},
+	}
+    {{end}}
+	return por
+}
