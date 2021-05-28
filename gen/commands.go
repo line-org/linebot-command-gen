@@ -12,6 +12,7 @@ import (
 
 type CommandHandler interface {
 	Speed(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	Test(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
 }
 type CommandData struct {
 	Cmds map[string]*CommandInfo
@@ -35,14 +36,22 @@ func NewCommandDatas(handler CommandHandler) *CommandData {
 	por := &CommandData{}
 	por.Cmds["speed"] = &CommandInfo{
 		ID: "speed", Level: 8, BaseText: "speed",
-		SubTexts: getSubTexts([]string{`スピード`, `速度`}),
+		SubTexts: getSubTexts([]string{}),
 		Help: struct {
 			Ja string
 			En string
 		}{Ja: "速度を図ります", En: "Measuring speed"},
 		Genre: "manage", Function: handler.Speed,
 	}
-
+	por.Cmds["test"] = &CommandInfo{
+		ID: "test", Level: 8, BaseText: "test",
+		SubTexts: getSubTexts([]string{}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "BOTnfasdfdas", En: ""},
+		Genre: "manage", Function: handler.Test,
+	}
 	return por
 }
 
