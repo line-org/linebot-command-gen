@@ -23,10 +23,10 @@ type Command struct {
 }
 
 func (c *Command) ToSubTextStr() string {
-	if c.SubTexts == nil {
-		return "[]string{`" + strings.Join(c.SubTexts, "`,`") + "`}"
+	if c.SubTexts == nil || len(c.SubTexts) == 0 {
+		return "[]string{}"
 	}
-	return "[]string{}"
+	return "[]string{`" + strings.Join(c.SubTexts, "`,`") + "`}"
 }
 
 func (c *Command) GetUpperId() string {
