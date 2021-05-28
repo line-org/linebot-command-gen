@@ -36,7 +36,7 @@ func NewCommandDatas(handler CommandHandler) *CommandData {
 	por := &CommandData{}
 	por.Cmds["speed"] = &CommandInfo{
 		ID: "speed", Level: 8, BaseText: "speed",
-		SubTexts: getSubTexts([]string{}),
+		SubTexts: getSubTexts([]string{`スピード`, `速度`}),
 		Help: struct {
 			Ja string
 			En string
