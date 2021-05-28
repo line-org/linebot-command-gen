@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/iancoleman/strcase"
 	"github.com/line-org/protection-bot/users"
+	"strings"
 )
 
 type Commands struct {
@@ -21,6 +22,9 @@ type Command struct {
 	Genre CmdGenre `yaml:"genre"`
 }
 
+func (c *Command) ToSubTextStr() string {
+	return "[]string{`" + strings.Join(c.SubTexts, "`,`") + "`}"
+}
 func (c *Command) GetUpperId() string {
 	return strcase.ToCamel(c.ID)
 }
