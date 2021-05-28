@@ -33,10 +33,18 @@ func NewCommandDatas(handler CommandHandler) *CommandData {
     {{- range $index, $cmd := .Cmds}}
 	por.Cmds["{{$cmd.ID}}"] = &CommandInfo{
 		ID:       "{{$cmd.ID}}", Level:    {{$cmd.Level.ToUserLevel}}, BaseText: "{{$cmd.BaseText}}",
-		SubTexts: nil,
+		SubTexts: getSubTexts({{$cmd.ToSubTextStr}}),
 		Help: struct {Ja string;En string}{Ja: "{{$cmd.Help.Ja}}", En: "{{$cmd.Help.En}}"},
 		Genre:    "{{$cmd.Genre}}",Function: handler.{{$cmd.GetUpperId}},
 	}
     {{end}}
 	return por
+}
+
+func getSubTexts(subs []string) map[string]struct{} {
+	mapVal := map[string]struct{}{}
+	for _, sub := range subs {
+		mapVal[sub] = struct{}{}
+	}
+	return mapVal
 }
