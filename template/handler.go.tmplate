@@ -9,7 +9,7 @@ import (
 
 type CommandHandler interface {
 	{{- range $index, $cmd := .Cmds}}
-	{{$cmd.IDUpper}}(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	{{$cmd.GetUpperId}}(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
     {{end}}
 }
 type CommandData struct {
@@ -32,16 +32,10 @@ func NewCommandDatas(handler CommandHandler) *CommandData {
 	por := &CommandData{}
     {{- range $index, $cmd := .Cmds}}
 	por.Cmds["{{$cmd.ID}}"] = &CommandInfo{
-		ID:       "{{$cmd.ID}}",
-		Level:    {{$cmd.Level.ToUserLevel}},
-		BaseText: "{{$cmd.BaseText}}",
+		ID:       "{{$cmd.ID}}", Level:    {{$cmd.Level.ToUserLevel}}, BaseText: "{{$cmd.BaseText}}",
 		SubTexts: nil,
-		Help: struct {
-			Ja string
-			En string
-		}{Ja: {{$cmd.Ja}}, En :{{$cmd.EN}}},
-		Genre:    "{{$cmd.Genre}}",
-		Function: handler.{{$cmd.IDUpper}},
+		Help: struct {Ja string;En string}{Ja: "{{$cmd.Help.Ja}}", En: "{{$cmd.Help.En}}"},
+		Genre:    "{{$cmd.Genre}}",Function: handler.{{$cmd.GetUpperId}},
 	}
     {{end}}
 	return por
