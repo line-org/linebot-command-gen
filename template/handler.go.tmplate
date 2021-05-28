@@ -12,8 +12,7 @@ import (
 
 type CommandHandler interface {
 	{{- range $index, $cmd := .Cmds}}
-	{{$cmd.GetUpperId}}(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
-    {{end}}
+	{{$cmd.GetUpperId}}(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error{{- end}}
 }
 type CommandData struct {
 	Cmds map[string]*CommandInfo
@@ -40,8 +39,7 @@ func NewCommandDatas(handler CommandHandler) *CommandData {
 		SubTexts: getSubTexts({{$cmd.ToSubTextStr}}),
 		Help: struct {Ja string;En string}{Ja: "{{$cmd.Help.Ja}}", En: "{{$cmd.Help.En}}"},
 		Genre:    "{{$cmd.Genre}}",Function: handler.{{$cmd.GetUpperId}},
-	}
-    {{end}}
+	}{{- end}}
 	return por
 }
 

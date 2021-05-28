@@ -23,8 +23,12 @@ type Command struct {
 }
 
 func (c *Command) ToSubTextStr() string {
-	return "[]string{`" + strings.Join(c.SubTexts, "`,`") + "`}"
+	if c.SubTexts == nil {
+		return "[]string{`" + strings.Join(c.SubTexts, "`,`") + "`}"
+	}
+	return "[]string{}"
 }
+
 func (c *Command) GetUpperId() string {
 	return strcase.ToCamel(c.ID)
 }

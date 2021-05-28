@@ -1,0 +1,11 @@
+- id: speed
+  level: LocalAdmin
+  base_text: speed
+  sub_texts:
+    - スピード
+    - 速度
+  help:
+    ja: 速度を図ります
+    en: Measuring speed
+  genre: manage
+

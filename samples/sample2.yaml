@@ -1,0 +1,9 @@
+- id: test
+  level: LocalAdmin
+  base_text: test
+  help:
+    ja: BOTnfasdfdas
+    en: ~
+  genre: manage
+  sub_texts: [ ]
+
