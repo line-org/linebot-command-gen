@@ -1,12 +1,16 @@
 package main
 
+import (
+	"github.com/iancoleman/strcase"
+	"github.com/line-org/protection-bot/users"
+)
+
 type Commands struct {
 	Cmds map[string]Command
 }
 
 type Command struct {
 	ID       string       `yaml:"id"`
-	IDUpper  string       `yaml:"-"`
 	Level    UserLevelStr `yaml:"level"`
 	BaseText string       `yaml:"base_text"`
 	SubTexts []string     `yaml:"sub_texts"`
@@ -15,6 +19,10 @@ type Command struct {
 		En string `yaml:"en"`
 	} `yaml:"help"`
 	Genre CmdGenre `yaml:"genre"`
+}
+
+func (c *Command) GetUpperId() string {
+	return strcase.ToCamel(c.ID)
 }
 
 type CmdGenre string
@@ -42,60 +50,36 @@ const (
 	Developer      UserLevelStr = "Developer"
 )
 
-func (u UserLevelStr) ToUserLevel() UserLevel {
+func (u UserLevelStr) ToUserLevel() users.UserLevel {
 	switch u {
 	case PermanentBlack:
-		return PermanentBlackInt
+		return users.PermanentBlack
 	case GlobalBlack:
-		return GlobalBlackInt
+		return users.GlobalBlack
 	case LocalBlack:
-		return LocalBlackInt
+		return users.LocalBlack
 	case None:
-		return NoneInt
+		return users.None
 	case LocalWhite:
-		return LocalWhiteInt
+		return users.LocalWhite
 	case GlobalWhite:
-		return GlobalWhiteInt
+		return users.GlobalWhite
 	case LocalBot:
-		return LocalBotInt
+		return users.LocalBot
 	case GlobalBot:
-		return GlobalBotInt
+		return users.GlobalBot
 	case LocalAdmin:
-		return LocalAdminInt
+		return users.LocalAdmin
 	case SimpleAdmin:
-		return SimpleAdminInt
+		return users.SimpleAdmin
 	case NormalAdmin:
-		return NormalAdminInt
+		return users.NormalAdmin
 	case SupremeAdmin:
-		return SupremeAdminInt
+		return users.SupremeAdmin
 	case Buyer:
-		return BuyerInt
+		return users.Buyer
 	case Developer:
-		return DeveloperInt
+		return users.Developer
 	}
-	return NoneInt
+	return users.None
 }
-
-type UserLevel int
-
-const (
-	PermanentBlackInt UserLevel = -3
-	GlobalBlackInt    UserLevel = -2
-	LocalBlackInt     UserLevel = -1
-
-	NoneInt UserLevel = 0
-
-	LocalWhiteInt  UserLevel = 1
-	GlobalWhiteInt UserLevel = 2
-
-	LocalBotInt  UserLevel = 5
-	GlobalBotInt UserLevel = 6
-
-	LocalAdminInt   UserLevel = 8
-	SimpleAdminInt  UserLevel = 9
-	NormalAdminInt  UserLevel = 10
-	SupremeAdminInt UserLevel = 11
-
-	BuyerInt     UserLevel = 20
-	DeveloperInt UserLevel = 21
-)
