@@ -6,12 +6,13 @@ type Commands struct {
 
 type Command struct {
 	ID       string       `yaml:"id"`
+	IDUpper  string       `yaml:"-"`
 	Level    UserLevelStr `yaml:"level"`
 	BaseText string       `yaml:"base_text"`
 	SubTexts []string     `yaml:"sub_texts"`
 	Help     struct {
 		Ja string `yaml:"ja"`
-		EN string `yaml:"en"`
+		En string `yaml:"en"`
 	} `yaml:"help"`
 	Genre CmdGenre `yaml:"genre"`
 }
