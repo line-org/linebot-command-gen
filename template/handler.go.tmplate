@@ -34,8 +34,8 @@ type CommandInfo struct {
 func NewCommandDatas(handler CommandHandler) *CommandData {
 	por := &CommandData{}
     {{- range $index, $cmd := .Cmds}}
-	por.Cmds["{{$cmd.ID}}"] = &CommandInfo{
-		ID:       "{{$cmd.ID}}", Level:    {{$cmd.Level.ToUserLevel}}, BaseText: "{{$cmd.BaseText}}",
+	por.Cmds["{{$cmd.GetLowerUpperID}}"] = &CommandInfo{
+		ID:       "{{$cmd.GetLowerUpperID}}", Level:    {{$cmd.Level.ToUserLevel}}, BaseText: "{{$cmd.BaseText}}",
 		SubTexts: getSubTexts({{$cmd.ToSubTextStr}}),
 		Help: struct {Ja string;En string}{Ja: "{{$cmd.Help.Ja}}", En: "{{$cmd.Help.En}}"},
 		Genre:    "{{$cmd.Genre}}",Function: handler.{{$cmd.GetUpperId}},

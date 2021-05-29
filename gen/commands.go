@@ -30,6 +30,7 @@ type CommandHandler interface {
 	Speed(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
 	Save(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
 	Shutdown(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	Server(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
 	GetSenderMid(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
 	GetMidsFromText(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
 	GetMidFromParams(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
@@ -230,6 +231,15 @@ func NewCommandDatas(handler CommandHandler) *CommandData {
 			En string
 		}{Ja: "BOTをシャットダウンします", En: "shutdown bot"},
 		Genre: "manage", Function: handler.Shutdown,
+	}
+	por.Cmds["server"] = &CommandInfo{
+		ID: "server", Level: 11, BaseText: "server",
+		SubTexts: getSubTexts([]string{}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "サーバーの状態を取得", En: "get server status"},
+		Genre: "manage", Function: handler.Server,
 	}
 	por.Cmds["getSenderMid"] = &CommandInfo{
 		ID: "getSenderMid", Level: 8, BaseText: "mid",

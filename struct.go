@@ -32,6 +32,9 @@ func (c *Command) ToSubTextStr() string {
 func (c *Command) GetUpperId() string {
 	return strcase.ToCamel(c.ID)
 }
+func (c *Command) GetLowerUpperID() string {
+	return strcase.ToLowerCamel(c.ID)
+}
 
 type CmdGenre string
 

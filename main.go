@@ -13,7 +13,7 @@ func main() {
 	if len(os.Args) == 1 {
 		log.Fatal().Msg("Target directory is required")
 	}
-	outputDir := *flag.String("o", "gen/", "output path")
+	var outputDir = flag.String("o", "gen/", "output path")
 	flag.Parse()
 
 	path := os.Args[len(os.Args)-1]
@@ -33,7 +33,7 @@ func main() {
 		cmds = GetCommandLists(path)
 	}
 	Validate(cmds)
-	GenerateCommandHandler(cmds, outputDir)
+	GenerateCommandHandler(cmds, *outputDir)
 }
 
 func Validate(cmds []Command) {
