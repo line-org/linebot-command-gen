@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"github.com/phuslu/log"
 	"io/fs"
 	"os"
@@ -12,6 +13,9 @@ func main() {
 	if len(os.Args) == 1 {
 		log.Fatal().Msg("Target directory is required")
 	}
+	outputDir := *flag.String("o", "gen/", "output path")
+	flag.Parse()
+
 	path := os.Args[len(os.Args)-1]
 	fInfo, err := os.Stat(path)
 	if err != nil {
@@ -29,7 +33,7 @@ func main() {
 		cmds = GetCommandLists(path)
 	}
 	Validate(cmds)
-	GenerateCommandHandler(cmds)
+	GenerateCommandHandler(cmds, outputDir)
 }
 
 func Validate(cmds []Command) {
