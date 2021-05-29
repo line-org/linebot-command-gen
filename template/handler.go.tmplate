@@ -17,7 +17,7 @@ type CommandHandler interface {
 type CommandData struct {
 	Cmds map[string]*CommandInfo
 }
-// github.com/line-org/protection-bot/bot 用の構造体
+// CommandInfo github.com/line-org/protection-bot/bot 用の構造体
 type CommandInfo struct {
 	ID       string
 	Level    users.UserLevel
