@@ -6,13 +6,12 @@ package commands
 import (
 	"github.com/line-org/lineall/lineapp/service/line"
 	"github.com/line-org/protection-bot/bot"
-	"github.com/line-org/protection-bot/commands"
 	"github.com/line-org/protection-bot/users"
 )
 
 type CommandHandler interface {
 	{{- range $index, $cmd := .Cmds}}
-	{{$cmd.GetUpperId}}(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error{{- end}}
+	{{$cmd.GetUpperId}}(bot *bot.ProtectionBot, msg *line.Message, cmd *ParsedCmd) error{{- end}}
 }
 type CommandData struct {
 	Cmds map[string]*CommandInfo
@@ -27,8 +26,8 @@ type CommandInfo struct {
 		Ja string
 		En string
 	}
-	Genre    commands.CmdGenre
-	Function func(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	Genre    CmdGenre
+	Function func(bot *bot.ProtectionBot, msg *line.Message, cmd *ParsedCmd) error
 }
 
 func NewCommandDatas(handler CommandHandler) *CommandData {
