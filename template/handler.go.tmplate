@@ -6,18 +6,17 @@ package commands
 import (
 	"github.com/line-org/lineall/lineapp/service/line"
 	"github.com/line-org/protection-bot/bot"
-	"github.com/line-org/protection-bot/commands"
 	"github.com/line-org/protection-bot/users"
 )
 
 type CommandHandler interface {
 	{{- range $index, $cmd := .Cmds}}
-	{{$cmd.GetUpperId}}(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error{{- end}}
+	{{$cmd.GetUpperId}}(bot *bot.ProtectionBot, msg *line.Message, cmd *ParsedCmd) error{{- end}}
 }
 type CommandData struct {
 	Cmds map[string]*CommandInfo
 }
-// github.com/line-org/protection-bot/bot 用の構造体
+// CommandInfo github.com/line-org/protection-bot/bot 用の構造体
 type CommandInfo struct {
 	ID       string
 	Level    users.UserLevel
@@ -27,15 +26,16 @@ type CommandInfo struct {
 		Ja string
 		En string
 	}
-	Genre    commands.CmdGenre
-	Function func(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	Genre    CmdGenre
+	Function func(bot *bot.ProtectionBot, msg *line.Message, cmd *ParsedCmd) error
 }
 
 func NewCommandDatas(handler CommandHandler) *CommandData {
 	por := &CommandData{}
+	por.Cmds = map[string]*CommandInfo{}
     {{- range $index, $cmd := .Cmds}}
-	por.Cmds["{{$cmd.ID}}"] = &CommandInfo{
-		ID:       "{{$cmd.ID}}", Level:    {{$cmd.Level.ToUserLevel}}, BaseText: "{{$cmd.BaseText}}",
+	por.Cmds["{{$cmd.GetLowerUpperID}}"] = &CommandInfo{
+		ID:       "{{$cmd.GetLowerUpperID}}", Level:    {{$cmd.Level.ToUserLevel}}, BaseText: "{{$cmd.BaseText}}",
 		SubTexts: getSubTexts({{$cmd.ToSubTextStr}}),
 		Help: struct {Ja string;En string}{Ja: "{{$cmd.Help.Ja}}", En: "{{$cmd.Help.En}}"},
 		Genre:    "{{$cmd.Genre}}",Function: handler.{{$cmd.GetUpperId}},

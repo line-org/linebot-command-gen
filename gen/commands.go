@@ -11,8 +11,35 @@ import (
 )
 
 type CommandHandler interface {
-	Speed(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	GetGroupInfo(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	GetAllJoinedGroup(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	CloseGroupURL(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	OpenGroupUrl(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	CheckGroupURLStatus(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	GetGroupURL(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	LeaveBotFromGroup(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	GetGroupID(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	GetGroupCreator(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	GetKillTargetsList(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	AddTargetsToKillList(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	DelTargetsFromKillList(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	KillAllTargets(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	Reboot(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	CallAllBots(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
 	Test(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	Speed(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	Save(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	Shutdown(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	Server(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	GetSenderMid(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	GetMidsFromText(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	GetMidFromParams(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	ChangeBotName(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	ChangeBotBio(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	ChangeBotIcon(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	ChangeBotCover(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	CloneBotProfile(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
+	CloseBotProfileRandom(bot *bot.ProtectionBot, msg *line.Message, cmd *commands.ParsedCmd) error
 }
 type CommandData struct {
 	Cmds map[string]*CommandInfo
@@ -34,23 +61,266 @@ type CommandInfo struct {
 
 func NewCommandDatas(handler CommandHandler) *CommandData {
 	por := &CommandData{}
-	por.Cmds["speed"] = &CommandInfo{
-		ID: "speed", Level: 8, BaseText: "speed",
+	por.Cmds["getGroupInfo"] = &CommandInfo{
+		ID: "getGroupInfo", Level: 8, BaseText: "ginfo",
+		SubTexts: getSubTexts([]string{`グループ情報`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "グループの情報を取得します", En: "get group infomations"},
+		Genre: "group", Function: handler.GetGroupInfo,
+	}
+	por.Cmds["getAllJoinedGroup"] = &CommandInfo{
+		ID: "getAllJoinedGroup", Level: 11, BaseText: "allgroupj",
+		SubTexts: getSubTexts([]string{`全グル取得`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "BOTが参加している全グループを取得します", En: "get all group bot joined"},
+		Genre: "group", Function: handler.GetAllJoinedGroup,
+	}
+	por.Cmds["closeGroupURL"] = &CommandInfo{
+		ID: "closeGroupURL", Level: 9, BaseText: "curl",
+		SubTexts: getSubTexts([]string{`グルウラル閉じ`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "グループの参加URLを閉じる", En: "close group invite url"},
+		Genre: "group", Function: handler.CloseGroupURL,
+	}
+	por.Cmds["openGroupUrl"] = &CommandInfo{
+		ID: "openGroupUrl", Level: 9, BaseText: "ourl",
+		SubTexts: getSubTexts([]string{`グルウラル開け`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "グループの参加URLを開ける", En: "open group invite url"},
+		Genre: "group", Function: handler.OpenGroupUrl,
+	}
+	por.Cmds["checkGroupURLStatus"] = &CommandInfo{
+		ID: "checkGroupURLStatus", Level: 8, BaseText: "checkurl",
 		SubTexts: getSubTexts([]string{}),
 		Help: struct {
 			Ja string
 			En string
-		}{Ja: "速度を図ります", En: "Measuring speed"},
-		Genre: "manage", Function: handler.Speed,
+		}{Ja: "グループのURLの状態を確認", En: "check group url status"},
+		Genre: "group", Function: handler.CheckGroupURLStatus,
+	}
+	por.Cmds["getGroupURL"] = &CommandInfo{
+		ID: "getGroupURL", Level: 9, BaseText: "geturl",
+		SubTexts: getSubTexts([]string{}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "グループURL取得", En: "get group invitation url"},
+		Genre: "group", Function: handler.GetGroupURL,
+	}
+	por.Cmds["leaveBotFromGroup"] = &CommandInfo{
+		ID: "leaveBotFromGroup", Level: 9, BaseText: "leave",
+		SubTexts: getSubTexts([]string{`退出`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "BOTをグループから抜けさせます", En: "leave bot from group"},
+		Genre: "group", Function: handler.LeaveBotFromGroup,
+	}
+	por.Cmds["getGroupID"] = &CommandInfo{
+		ID: "getGroupID", Level: 8, BaseText: "gid",
+		SubTexts: getSubTexts([]string{`グルID`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "グループの識別番号を取得します", En: "get group id"},
+		Genre: "group", Function: handler.GetGroupID,
+	}
+	por.Cmds["getGroupCreator"] = &CommandInfo{
+		ID: "getGroupCreator", Level: 8, BaseText: "gcleator",
+		SubTexts: getSubTexts([]string{`グル作者`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "グループの作者の連絡先を取得", En: "get group creator&#39;s contact"},
+		Genre: "group", Function: handler.GetGroupCreator,
+	}
+	por.Cmds["getKillTargetsList"] = &CommandInfo{
+		ID: "getKillTargetsList", Level: 11, BaseText: "killlist",
+		SubTexts: getSubTexts([]string{`キル一覧`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "KILLする対象の一覧を取得", En: "get all target list of KILL"},
+		Genre: "kill", Function: handler.GetKillTargetsList,
+	}
+	por.Cmds["addTargetsToKillList"] = &CommandInfo{
+		ID: "addTargetsToKillList", Level: 11, BaseText: "killadd",
+		SubTexts: getSubTexts([]string{`キル追加`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "KILLする対象に追加", En: "add to kill target list"},
+		Genre: "kill", Function: handler.AddTargetsToKillList,
+	}
+	por.Cmds["delTargetsFromKillList"] = &CommandInfo{
+		ID: "delTargetsFromKillList", Level: 11, BaseText: "killdel",
+		SubTexts: getSubTexts([]string{`キル削除`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "KILLする対象から外す", En: "delete targets from kill list"},
+		Genre: "kill", Function: handler.DelTargetsFromKillList,
+	}
+	por.Cmds["killAllTargets"] = &CommandInfo{
+		ID: "killAllTargets", Level: 11, BaseText: "killall",
+		SubTexts: getSubTexts([]string{}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "KILL Listに入っているターゲットを蹴る", En: "Kick all targets in kill list"},
+		Genre: "kill", Function: handler.KillAllTargets,
+	}
+	por.Cmds["reboot"] = &CommandInfo{
+		ID: "reboot", Level: 20, BaseText: "reboot",
+		SubTexts: getSubTexts([]string{`再起動`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "BOTを再起動します", En: "reboot bot"},
+		Genre: "manage", Function: handler.Reboot,
+	}
+	por.Cmds["callAllBots"] = &CommandInfo{
+		ID: "callAllBots", Level: 11, BaseText: "call",
+		SubTexts: getSubTexts([]string{`点呼`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "BOTの点呼を行う", En: "call all bots"},
+		Genre: "manage", Function: handler.CallAllBots,
 	}
 	por.Cmds["test"] = &CommandInfo{
 		ID: "test", Level: 8, BaseText: "test",
+		SubTexts: getSubTexts([]string{`テスト`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "BOTの動作確認", En: "check bots&#39;s operation"},
+		Genre: "manage", Function: handler.Test,
+	}
+	por.Cmds["speed"] = &CommandInfo{
+		ID: "speed", Level: 10, BaseText: "speed",
+		SubTexts: getSubTexts([]string{`速度`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "BOTの速度を測定", En: "check bot&#39;s speed"},
+		Genre: "manage", Function: handler.Speed,
+	}
+	por.Cmds["save"] = &CommandInfo{
+		ID: "save", Level: 10, BaseText: "save",
+		SubTexts: getSubTexts([]string{`保存`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "BOTの情報を保存する", En: "save bot infomation"},
+		Genre: "manage", Function: handler.Save,
+	}
+	por.Cmds["shutdown"] = &CommandInfo{
+		ID: "shutdown", Level: 20, BaseText: "shutdown",
+		SubTexts: getSubTexts([]string{`シャットダウン`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "BOTをシャットダウンします", En: "shutdown bot"},
+		Genre: "manage", Function: handler.Shutdown,
+	}
+	por.Cmds["server"] = &CommandInfo{
+		ID: "server", Level: 11, BaseText: "server",
 		SubTexts: getSubTexts([]string{}),
 		Help: struct {
 			Ja string
 			En string
-		}{Ja: "BOTnfasdfdas", En: ""},
-		Genre: "manage", Function: handler.Test,
+		}{Ja: "サーバーの状態を取得", En: "get server status"},
+		Genre: "manage", Function: handler.Server,
+	}
+	por.Cmds["getSenderMid"] = &CommandInfo{
+		ID: "getSenderMid", Level: 8, BaseText: "mid",
+		SubTexts: getSubTexts([]string{}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "送信者の識別IDを取得", En: "get sender&#39;s id"},
+		Genre: "other", Function: handler.GetSenderMid,
+	}
+	por.Cmds["getMidsFromText"] = &CommandInfo{
+		ID: "getMidsFromText", Level: 8, BaseText: "midtxt",
+		SubTexts: getSubTexts([]string{}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "TEXTの中にあるMIDの一覧を取得", En: "get mids from text"},
+		Genre: "other", Function: handler.GetMidsFromText,
+	}
+	por.Cmds["getMidFromParams"] = &CommandInfo{
+		ID: "getMidFromParams", Level: 8, BaseText: "getmid",
+		SubTexts: getSubTexts([]string{}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "パラメータに当てはまるMIDのユーザーの連絡先を取得", En: "Get the contact of the MID that matches the parameter"},
+		Genre: "other", Function: handler.GetMidFromParams,
+	}
+	por.Cmds["change_bot_name"] = &CommandInfo{
+		ID: "change_bot_name", Level: 11, BaseText: "cname",
+		SubTexts: getSubTexts([]string{`名前変更`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "BOTの名前を変更します", En: "change bot name"},
+		Genre: "profile", Function: handler.ChangeBotName,
+	}
+	por.Cmds["change_bot_bio"] = &CommandInfo{
+		ID: "change_bot_bio", Level: 11, BaseText: "cbio",
+		SubTexts: getSubTexts([]string{`ステメ変更`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "BOTのステータスメッセージを変更します", En: "change bot status message"},
+		Genre: "profile", Function: handler.ChangeBotBio,
+	}
+	por.Cmds["change_bot_icon"] = &CommandInfo{
+		ID: "change_bot_icon", Level: 11, BaseText: "cicon",
+		SubTexts: getSubTexts([]string{`アイコン変更`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "BOTのアイコンを変更します", En: "change bot icon"},
+		Genre: "profile", Function: handler.ChangeBotIcon,
+	}
+	por.Cmds["change_bot_cover"] = &CommandInfo{
+		ID: "change_bot_cover", Level: 11, BaseText: "ccover",
+		SubTexts: getSubTexts([]string{`背景変更`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "BOTの背景画像を変更します", En: "change bot cover"},
+		Genre: "profile", Function: handler.ChangeBotCover,
+	}
+	por.Cmds["clone_bot_profile"] = &CommandInfo{
+		ID: "clone_bot_profile", Level: 11, BaseText: "cclone",
+		SubTexts: getSubTexts([]string{`プロフコピー`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "BOTのプロフィールを対象からコピーします", En: "copy bot&#39;s profile from target"},
+		Genre: "profile", Function: handler.CloneBotProfile,
+	}
+	por.Cmds["close_bot_profile_random"] = &CommandInfo{
+		ID: "close_bot_profile_random", Level: 11, BaseText: "crclone",
+		SubTexts: getSubTexts([]string{`プロフランダムコピー`}),
+		Help: struct {
+			Ja string
+			En string
+		}{Ja: "BOTのプロフィールをランダムなユーザー(110万人)からコピーします", En: "copy bot&#39;s profile from random users(1.1Million targets)"},
+		Genre: "profile", Function: handler.CloseBotProfileRandom,
 	}
 	return por
 }

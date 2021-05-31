@@ -14,7 +14,7 @@ func GetCommandLists(path string) []Command {
 	var cmds []Command
 	err = yaml.Unmarshal(file, &cmds)
 	if err != nil {
-		log.Fatal().Err(err).Msg("failed to parse commands file")
+		log.Fatal().Err(err).Msg("failed to parse commands file: " + path)
 	}
 	return cmds
 }

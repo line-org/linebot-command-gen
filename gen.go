@@ -29,13 +29,13 @@ func ExecCommand(command string, args ...string) (string, error) {
 	return string(b), nil
 }
 
-func GenerateCommandHandler(cmds []Command) {
+func GenerateCommandHandler(cmds []Command, outputDir string) {
 	tmpFile, err := ioutil.ReadFile("template/handler.go.tmplate")
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to load tempalte file")
 	}
 	os.MkdirAll("gen", os.ModePerm)
-	path := "gen/commands.go"
+	path := outputDir + "/commands.go"
 	file, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY, 0664)
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to open target file")
