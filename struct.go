@@ -20,8 +20,7 @@ type Command struct {
 		En            string   `yaml:"en"`
 		ExampleUsages []string `yaml:"example_usages"`
 	} `yaml:"help"`
-	Genre       CmdGenre `yaml:"genre"`
-	TargetParam bool     `yaml:"target_param"`
+	Genre CmdGenre `yaml:"genre"`
 }
 
 func (c *Command) ToSubTextStr() string {
