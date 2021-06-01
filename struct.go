@@ -16,11 +16,12 @@ type Command struct {
 	BaseText string       `yaml:"base_text"`
 	SubTexts []string     `yaml:"sub_texts"`
 	Help     struct {
-		Ja string `yaml:"ja"`
-		En string `yaml:"en"`
+		Ja            string   `yaml:"ja"`
+		En            string   `yaml:"en"`
+		ExampleUsages []string `yaml:"example_usages"`
 	} `yaml:"help"`
-	Genre CmdGenre `yaml:"genre"`
-	TargetParam bool `yaml:"target_param"`
+	Genre       CmdGenre `yaml:"genre"`
+	TargetParam bool     `yaml:"target_param"`
 }
 
 func (c *Command) ToSubTextStr() string {
@@ -29,7 +30,12 @@ func (c *Command) ToSubTextStr() string {
 	}
 	return "[]string{`" + strings.Join(c.SubTexts, "`,`") + "`}"
 }
-
+func (c *Command) ToExampleUsagesStr() string {
+	if c.Help.ExampleUsages == nil || len(c.Help.ExampleUsages) == 0 {
+		return "[]string{}"
+	}
+	return "[]string{`" + strings.Join(c.Help.ExampleUsages, "`,`") + "`}"
+}
 func (c *Command) GetUpperId() string {
 	return strcase.ToCamel(c.ID)
 }

@@ -25,6 +25,7 @@ type CommandInfo struct {
 	Help     struct {
 		Ja string
 		En string
+		ExampleUsages []string
 	}
 	Genre    CmdGenre
 	TargetParam bool
@@ -38,7 +39,7 @@ func NewCommandDatas(handler CommandHandler) *CommandData {
 	por.Cmds["{{$cmd.GetLowerUpperID}}"] = &CommandInfo{
 		ID:       "{{$cmd.GetLowerUpperID}}", Level:    {{$cmd.Level.ToUserLevel}}, BaseText: "{{$cmd.BaseText}}",
 		SubTexts: getSubTexts({{$cmd.ToSubTextStr}}),
-		Help: struct {Ja string;En string}{Ja: "{{$cmd.Help.Ja}}", En: "{{$cmd.Help.En}}"},
+		Help: struct {Ja string;En string;ExampleUsages []string}{Ja: "{{$cmd.Help.Ja}}", En: "{{$cmd.Help.En}}", ExampleUsages: {{$cmd.ToExampleUsagesStr}},
 		Genre:    "{{$cmd.Genre}}",Function: handler.{{$cmd.GetUpperId}},
 		TargetParam: {{$cmd.TargetParam}},
 	}{{- end}}
