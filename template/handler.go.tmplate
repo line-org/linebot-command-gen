@@ -28,7 +28,6 @@ type CommandInfo struct {
 		ExampleUsages []string
 	}
 	Genre    CmdGenre
-	TargetParam bool
 	Function func(bot *bot.ProtectionBot, msg *line.Message, cmd *ParsedCmd)
 }
 
@@ -41,7 +40,6 @@ func NewCommandDatas(handler CommandHandler) *CommandData {
 		SubTexts: getSubTexts({{$cmd.ToSubTextStr}}),
 		Help: struct {Ja string;En string;ExampleUsages []string}{Ja: "{{$cmd.Help.Ja}}", En: "{{$cmd.Help.En}}", ExampleUsages: {{$cmd.ToExampleUsagesStr}}},
 		Genre:    "{{$cmd.Genre}}",Function: handler.{{$cmd.GetUpperId}},
-		TargetParam: {{$cmd.TargetParam}},
 	}{{- end}}
 	return por
 }
