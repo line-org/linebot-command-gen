@@ -18,7 +18,7 @@ type Command struct {
 	Help     struct {
 		Ja            string   `yaml:"ja"`
 		En            string   `yaml:"en"`
-		ExampleUsages []string `yaml:"example_usages"`
+		ExampleUsages []string `yaml:"usages"`
 	} `yaml:"help"`
 	Genre CmdGenre `yaml:"genre"`
 }
