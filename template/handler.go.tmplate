@@ -11,7 +11,7 @@ import (
 
 type CommandHandler interface {
 	{{- range $index, $cmd := .Cmds}}
-	{{$cmd.GetUpperId}}(bot *bot.ProtectionBot, msg *line.Message, cmd *ParsedCmd) error{{- end}}
+	{{$cmd.GetUpperId}}(bot *bot.ProtectionBot, msg *line.Message, cmd *ParsedCmd) {{- end}}
 }
 type CommandData struct {
 	Cmds map[string]*CommandInfo
@@ -27,7 +27,8 @@ type CommandInfo struct {
 		En string
 	}
 	Genre    CmdGenre
-	Function func(bot *bot.ProtectionBot, msg *line.Message, cmd *ParsedCmd) error
+	TargetParam bool
+	Function func(bot *bot.ProtectionBot, msg *line.Message, cmd *ParsedCmd)
 }
 
 func NewCommandDatas(handler CommandHandler) *CommandData {
@@ -39,6 +40,7 @@ func NewCommandDatas(handler CommandHandler) *CommandData {
 		SubTexts: getSubTexts({{$cmd.ToSubTextStr}}),
 		Help: struct {Ja string;En string}{Ja: "{{$cmd.Help.Ja}}", En: "{{$cmd.Help.En}}"},
 		Genre:    "{{$cmd.Genre}}",Function: handler.{{$cmd.GetUpperId}},
+		TargetParam: {{$cmd.TargetParam}},
 	}{{- end}}
 	return por
 }
