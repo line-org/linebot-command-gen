@@ -36,6 +36,7 @@ func GenerateCommandHandler(cmds []Command, outputDir string) {
 	}
 	os.MkdirAll("gen", os.ModePerm)
 	path := outputDir + "/commands.go"
+	os.Remove(path)
 	file, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY, 0664)
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to open target file")
