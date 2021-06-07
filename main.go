@@ -38,11 +38,22 @@ func main() {
 
 func Validate(cmds []Command) {
 	var ids []string
+	var texts []string
 	for _, cmd := range cmds {
 		if isContain(ids, cmd.ID) {
 			log.Fatal().Msg("cant use same id: " + cmd.ID)
 		}
 		ids = append(ids, cmd.ID)
+		if isContain(texts, cmd.BaseText) {
+			log.Fatal().Msg("cant use same base text: " + cmd.BaseText)
+		}
+		texts = append(texts, cmd.BaseText)
+		for _, s := range cmd.SubTexts {
+			if isContain(texts, s) {
+				log.Fatal().Msg("cant use same sub text: " + s)
+			}
+			texts = append(texts, s)
+		}
 	}
 }
 

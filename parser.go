@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/phuslu/log"
 	"gopkg.in/yaml.v2"
+
 	"io/ioutil"
 )
 
@@ -15,6 +16,9 @@ func GetCommandLists(path string) []Command {
 	err = yaml.Unmarshal(file, &cmds)
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to parse commands file: " + path)
+	}
+	for _, c := range cmds {
+		c.Init()
 	}
 	return cmds
 }

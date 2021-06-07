@@ -19,8 +19,17 @@ type Command struct {
 		Ja string `yaml:"ja"`
 		En string `yaml:"en"`
 	} `yaml:"help"`
-	Genre CmdGenre `yaml:"genre"`
-	TargetParam bool `yaml:"target_param"`
+	Genre       CmdGenre `yaml:"genre"`
+	TargetParam bool     `yaml:"target_param"`
+}
+
+func (c *Command) Init() {
+	c.BaseText = strings.ReplaceAll(c.BaseText, " ", "")
+	var slice []string
+	for _, s := range c.SubTexts {
+		slice = append(slice, strings.ReplaceAll(s, " ", ""))
+	}
+	c.SubTexts = slice
 }
 
 func (c *Command) ToSubTextStr() string {
