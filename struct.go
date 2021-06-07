@@ -16,9 +16,9 @@ type Command struct {
 	BaseText string       `yaml:"base_text"`
 	SubTexts []string     `yaml:"sub_texts"`
 	Help     struct {
-		Ja            string   `yaml:"ja"`
-		En            string   `yaml:"en"`
-		ExampleUsages []string `yaml:"usages"`
+		Ja           string `yaml:"ja"`
+		En           string `yaml:"en"`
+		ExampleUsage []string
 	} `yaml:"help"`
 	Genre CmdGenre `yaml:"genre"`
 }
@@ -29,12 +29,14 @@ func (c *Command) ToSubTextStr() string {
 	}
 	return "[]string{`" + strings.Join(c.SubTexts, "`,`") + "`}"
 }
+
 func (c *Command) ToExampleUsagesStr() string {
-	if c.Help.ExampleUsages == nil || len(c.Help.ExampleUsages) == 0 {
+	if c.Help.ExampleUsage == nil || len(c.Help.ExampleUsage) == 0 {
 		return "[]string{}"
 	}
-	return "[]string{`" + strings.Join(c.Help.ExampleUsages, "`,`") + "`}"
+	return "[]string{`" + strings.Join(c.Help.ExampleUsage, "`,`") + "`}"
 }
+
 func (c *Command) GetUpperId() string {
 	return strcase.ToCamel(c.ID)
 }
