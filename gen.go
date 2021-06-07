@@ -29,7 +29,7 @@ func ExecCommand(command string, args ...string) (string, error) {
 	return string(b), nil
 }
 
-func GenerateCommandHandler(cmds []Command, outputDir string) {
+func GenerateCommandHandler(cmds []*Command, outputDir string) {
 	tmpFile, err := ioutil.ReadFile("template/handler.go.tmplate")
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to load tempalte file")

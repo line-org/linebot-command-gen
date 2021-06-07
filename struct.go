@@ -16,20 +16,11 @@ type Command struct {
 	BaseText string       `yaml:"base_text"`
 	SubTexts []string     `yaml:"sub_texts"`
 	Help     struct {
-		Ja string `yaml:"ja"`
-		En string `yaml:"en"`
+		Ja           string `yaml:"ja"`
+		En           string `yaml:"en"`
+		ExampleUsage []string
 	} `yaml:"help"`
-	Genre       CmdGenre `yaml:"genre"`
-	TargetParam bool     `yaml:"target_param"`
-}
-
-func (c *Command) Init() {
-	c.BaseText = strings.ReplaceAll(c.BaseText, " ", "")
-	var slice []string
-	for _, s := range c.SubTexts {
-		slice = append(slice, strings.ReplaceAll(s, " ", ""))
-	}
-	c.SubTexts = slice
+	Genre CmdGenre `yaml:"genre"`
 }
 
 func (c *Command) ToSubTextStr() string {
@@ -37,6 +28,13 @@ func (c *Command) ToSubTextStr() string {
 		return "[]string{}"
 	}
 	return "[]string{`" + strings.Join(c.SubTexts, "`,`") + "`}"
+}
+
+func (c *Command) ToExampleUsagesStr() string {
+	if c.Help.ExampleUsage == nil || len(c.Help.ExampleUsage) == 0 {
+		return "[]string{}"
+	}
+	return "[]string{`" + strings.Join(c.Help.ExampleUsage, "`,`") + "`}"
 }
 
 func (c *Command) GetUpperId() string {

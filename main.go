@@ -21,7 +21,7 @@ func main() {
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed check path")
 	}
-	var cmds []Command
+	var cmds []*Command
 	if fInfo.IsDir() {
 		filepath.Walk(path, func(path string, info fs.FileInfo, err error) error {
 			if strings.HasSuffix(path, "yaml") {
@@ -32,11 +32,20 @@ func main() {
 	} else {
 		cmds = GetCommandLists(path)
 	}
+
+	for _, c := range cmds {
+		c.BaseText = strings.ReplaceAll(c.BaseText, " ", "")
+		var slice []string
+		for _, s := range c.SubTexts {
+			slice = append(slice, strings.ReplaceAll(s, " ", ""))
+		}
+		c.SubTexts = slice
+	}
 	Validate(cmds)
 	GenerateCommandHandler(cmds, *outputDir)
 }
 
-func Validate(cmds []Command) {
+func Validate(cmds []*Command) {
 	var ids []string
 	var texts []string
 	for _, cmd := range cmds {
